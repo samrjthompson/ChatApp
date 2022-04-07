@@ -57,6 +57,18 @@ app.get('/users/:id', async (req, res) => {
 })
 /* ################################################# */
 
+// UPDATE
+app.get('/users/:id/edit', async (req, res) => {
+    const user = await User.findById(req.params.id)
+    res.render('users/edit', { user })
+})
+
+app.put('/users/:id', async (req, res) => {
+    const {id} = req.params
+    const user = await User.findByIdAndUpdate(id, req.body.user)
+    res.redirect(`/users/${user._id}`)
+})
+/* ################################################# */
 
 //////////////////////////////////////////////////////
 
