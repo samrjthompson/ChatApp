@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/samrjthompson/ChatApp/issues"
   },
-  "homepage": "https://github.com/samrjthompson/ChatApp#readme"
+  "homepage": "https://github.com/samrjthompson/ChatApp#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.2.10"
+  }
 }
