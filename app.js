@@ -70,6 +70,14 @@ app.put('/users/:id', async (req, res) => {
 })
 /* ################################################# */
 
+// DELETE
+app.delete('/users/:id', async (req, res) => {
+    const {id} = req.params
+    await User.findByIdAndDelete(id)
+    res.redirect('/users')
+})
+/* ################################################# */
+
 //////////////////////////////////////////////////////
 
 app.listen(port, () => {
