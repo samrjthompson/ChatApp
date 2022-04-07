@@ -33,6 +33,20 @@ app.get('/', (req, res) => {
     res.render('home')
 })
 
+// READ
+app.get('/users', async (req, res) => {
+    const users = await User.find({})
+    res.render('users/index', { users })
+})
+
+app.get('/users/:id', async (req, res) => {
+    const user = await User.findById(req.params.id)
+    res.render('users/show', { user })
+})
+
+
+//////////////////////////////////////////////////////
+
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`)
 })
