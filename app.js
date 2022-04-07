@@ -33,6 +33,18 @@ app.get('/', (req, res) => {
     res.render('home')
 })
 
+// CREATE
+app.get('/users/new', (req, res) => {
+    res.render('users/new')
+})
+
+app.post('/users', async (req, res) => {
+    const newUser = new User(req.body)
+    await newUser.save()
+    res.redirect(`users/${newUser._id}`)
+})
+/* ################################################# */
+
 // READ
 app.get('/users', async (req, res) => {
     const users = await User.find({})
@@ -43,6 +55,7 @@ app.get('/users/:id', async (req, res) => {
     const user = await User.findById(req.params.id)
     res.render('users/show', { user })
 })
+/* ################################################# */
 
 
 //////////////////////////////////////////////////////
