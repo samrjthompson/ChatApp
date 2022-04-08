@@ -4,6 +4,8 @@ const path = require('path')
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const User = require('./models/user')
+const morgan = require('morgan')
+const MessageBoard = require('./models/messageBoard')
 
 const port = 3000
 
@@ -77,6 +79,33 @@ app.delete('/users/:id', async (req, res) => {
     res.redirect('/users')
 })
 /* ################################################# */
+
+
+
+/* MESSAGE BOARD SETUP */
+
+// CREATE
+app.get('/messageBoards/new', (req, res) => {
+    res.render('messageBoards/new')
+})
+
+app.post('/messageBoards', async (req, res) => {
+    const newMessageBoard = new MessageBoard(req.body)
+    await newMessageBoard.save()
+    res.redirect(`messageBoards/${newMessageBoard._id}`)
+})
+/* ################################################# */
+
+// READ
+app.get('/messageBoards', async (req, res) => {
+    const messageBoards = await MessageBoard.find({})
+    res.render('messageBoards/index', { messageBoards })
+})
+
+app.get('/messageBoards/:id', async (req, res) => {
+    const messageBoard = await MessageBoard.findById(req.params.id)
+    res.render('messageBoards/show', { messageBoard })
+})
 
 //////////////////////////////////////////////////////
 
