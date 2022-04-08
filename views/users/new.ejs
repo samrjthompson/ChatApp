@@ -1,24 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New User</title>
-</head>
-<body>
-    <form action="/users" method="POST">
-        <label for="firstName">User's First Name</label>
-        <input type="text" name="firstName" id="firstName" placeholder="First name...">
+<%layout('layouts/boilerplate')%> 
+<form action="/users" method="POST">
+    <label for="firstName">User's First Name</label>
+    <input type="text" name="firstName" id="firstName" placeholder="First name...">
 
-        <label for="lastName">User's Last Name</label>
-        <input type="text" name="lastName" id="lastName" placeholder="Last name...">
+    <label for="lastName">User's Last Name</label>
+    <input type="text" name="lastName" id="lastName" placeholder="Last name...">
 
-        <label for="username">User's Username</label>
-        <input type="text" name="username" id="username" placeholder="Username...">
+    <label for="username">User's Username</label>
+    <input type="text" name="username" id="username" placeholder="Username...">
 
-        <button>Submit</button>
-    </form>
-    <a href="/campgrounds">All Users</a>
-</body>
-</html>
+    <button>Submit</button>
+</form>
+<a href="/campgrounds">All Users</a>
