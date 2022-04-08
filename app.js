@@ -35,6 +35,8 @@ app.get('/', (req, res) => {
     res.render('home')
 })
 
+/* USER SETUP */
+
 // CREATE
 app.get('/users/new', (req, res) => {
     res.render('users/new')
@@ -106,6 +108,28 @@ app.get('/messageBoards/:id', async (req, res) => {
     const messageBoard = await MessageBoard.findById(req.params.id)
     res.render('messageBoards/show', { messageBoard })
 })
+/* ################################################# */
+
+// UPDATE
+app.get('/messageBoards/:id/edit', async (req, res) => {
+    const messageBoard = await MessageBoard.findById(req.params.id)
+    res.render('messageBoards/edit', { messageBoard })
+})
+
+app.put('/messageBoards/:id', async (req, res) => {
+    const messageBoard = await MessageBoard.findByIdAndUpdate(req.params.id, req.body.messageBoard)
+    res.redirect(`/messageBoards/${messageBoard._id}`)
+})
+/* ################################################# */
+
+// DELETE
+app.delete('/messageBoards/:id', async (req, res) => {
+    await MessageBoard.findByIdAndDelete(req.params.id)
+    res.redirect('/messageBoards')
+})
+/* ################################################# */
+
+
 
 //////////////////////////////////////////////////////
 
