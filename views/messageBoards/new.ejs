@@ -1,9 +1,15 @@
 <%layout('layouts/boilerplate')%> 
-<h1>Create New Message Board</h1>
-<form action="/messageBoards" method="POST">
-    <label for="name">Name of Group Chat</label>
-    <input type="text" name="name" id="name" placeholder="Name...">
-
-    <button>Submit</button>
-</form>
-<a href="#">All Users</a>
+<div class="row">
+    <h1 class="text-center">Create New Message Board</h1>
+    <div class="col-6 offset-3">
+        <form class="mb-3" action="/messageBoards" method="POST">
+            <div class="mb-3">
+                <label class="form-label" for="name">Name of Group Chat</label>
+                <input class="form-control" type="text" name="name" id="name" placeholder="Name...">
+            </div>
+        
+            <button class="btn btn-success">Submit</button>
+        </form>
+        <a href="/messageBoards">All Message Boards</a>
+    </div>
+</div>

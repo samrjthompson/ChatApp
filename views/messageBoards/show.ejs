@@ -1,13 +1,17 @@
 <%layout('layouts/boilerplate')%> 
-<h1>Showing <%= messageBoard.name %></h1>
 
-<ul>
-    <li>Name: <%= messageBoard.name%></li>
-</ul>
-
-<form action="/messageBoards/<%=messageBoard._id%>?_method=DELETE" method="POST">
-    <button>Delete</button>
-</form>
-
-<a href="/messageBoards">Show All Message Boards</a>
-<a href="/messageBoards/<%=messageBoard._id%>/edit">Edit</a>
+<div class="row mb-3">
+    <div class="col-6 offset-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <%=messageBoard.name%>
+                </h5>
+                <a href="/messageBoards/<%=messageBoard._id%>/edit" class="card-link btn btn-info">Edit</a>
+                <form class="d-inline" action="/messageBoards/<%=messageBoard._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
