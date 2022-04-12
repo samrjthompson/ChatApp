@@ -20,7 +20,9 @@ const seedDB = async () => {
         const newUser = new User({
             firstName: `${people[i].firstName}`,
             lastName: `${people[i].lastName}`,
-            username: `${people[i].username}`
+            username: `${people[i].username}`,
+            image: 'https://source.unsplash.com/collection/483251',
+            bio: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit quidem, dolorum consequatur doloribus omnis iure reiciendis, accusantium mollitia eaque earum dignissimos error libero unde autem nostrum magni beatae illum aperiam?'
         })
         await newUser.save()
     }
