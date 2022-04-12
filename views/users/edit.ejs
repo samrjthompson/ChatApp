@@ -1,14 +1,40 @@
 <%layout('layouts/boilerplate')%> 
-<form action="/users/<%= user._id %>?_method=PUT" method="POST">
-    <label for="firstName">User's First Name</label>
-    <input type="text" name="user[firstName]" id="firstName" placeholder="First name..." value="<%=user.firstName%>">
+<div class="row">
+    <h1 class="text-center">Edit User</h1>
+    <div class="col-6 offset-3">
+        <form action="/users/<%= user._id %>?_method=PUT" method="POST">
+            <div class="mb-3">
+                <label class="form-label" for="firstName">User's First Name</label>
+                <input class="form-control" type="text" name="user[firstName]" id="firstName" placeholder="First
+                name..." value="<%=user.firstName%>">
+            </div>
 
-    <label for="lastName">User's Last Name</label>
-    <input type="text" name="user[lastName]" id="lastName" placeholder="Last name..." value="<%=user.lastName%>">
+            <div class="mb-3">
+                <label class="form-label" for="lastName">User's Last Name</label>
+                <input class="form-control" type="text" name="user[lastName]" id="lastName" placeholder="Last
+                name..." value="<%=user.lastName%>">
+            </div>
 
-    <label for="username">User's Username</label>
-    <input type="text" name="user[username]" id="username" placeholder="Username..." value="<%=user.username%>">
+            <div class="mb-3">
+                <label class="form-label" for="username">User's Username</label>
+                <input class="form-control" type="text" name="user[username]" id="username"
+                placeholder="Username..." value="<%=user.username%>">
+            </div>
 
-    <button>Submit</button>
-</form>
-<a href="/users">All Users</a>
+            <div class="mb-3">
+                <label class="form-label" for="image">Image URL</label>
+                <input class="form-control" type="text" name="user[image]" id="image" placeholder="URL..." value="<%= user.image %>">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="bio">User's Bio</label>
+                <textarea class="form-control" type="text" name="user[bio]" id="bio" placeholder="Bio..."><%= user.bio %></textarea>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-info">Update User</button>
+            </div>
+        </form>
+        <a href="/campgrounds">Backt To All Users</a>
+    </div>
+</div>
