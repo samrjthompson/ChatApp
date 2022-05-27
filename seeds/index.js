@@ -3,8 +3,11 @@ const methodOverride = require('method-override')
 const User = require('../models/user')
 const people = require('./people')
 
+const remoteUrl = 'mongodb+srv://Sam:AleEEEOirAqGGl86@cluster0.ncr0l.mongodb.net/?retryWrites=true&w=majority'
+const localUrl = 'mongodb://localhost:27017/chat-app'
+
 // CONNECTION SETUP
-mongoose.connect('mongodb://localhost:27017/chat-app')
+mongoose.connect(remoteUrl)
 .then(() => {
     console.log('MONGO CONNECTION OPEN!')
 })
