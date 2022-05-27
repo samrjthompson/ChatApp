@@ -2,23 +2,23 @@
 <div class="row">
     <h1 class="text-center">Edit User</h1>
     <div class="col-6 offset-3">
-        <form action="/users/<%= user._id %>?_method=PUT" method="POST">
+        <form action="/users/<%= user._id %>?_method=PUT" method="POST" novalidate class="validated-form">
             <div class="mb-3">
                 <label class="form-label" for="firstName">User's First Name</label>
                 <input class="form-control" type="text" name="user[firstName]" id="firstName" placeholder="First
-                name..." value="<%=user.firstName%>">
+                name..." value="<%=user.firstName%>" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="lastName">User's Last Name</label>
                 <input class="form-control" type="text" name="user[lastName]" id="lastName" placeholder="Last
-                name..." value="<%=user.lastName%>">
+                name..." value="<%=user.lastName%>" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="username">User's Username</label>
                 <input class="form-control" type="text" name="user[username]" id="username"
-                placeholder="Username..." value="<%=user.username%>">
+                placeholder="Username..." value="<%=user.username%>" required>
             </div>
 
             <div class="mb-3">
@@ -28,7 +28,7 @@
 
             <div class="mb-3">
                 <label class="form-label" for="bio">User's Bio</label>
-                <textarea class="form-control" type="text" name="user[bio]" id="bio" placeholder="Bio..."><%= user.bio %></textarea>
+                <textarea class="form-control" type="text" name="user[bio]" id="bio" placeholder="Bio..." required><%= user.bio %></textarea>
             </div>
 
             <div class="mb-3">
