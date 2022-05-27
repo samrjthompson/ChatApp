@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
+const Joi = require('joi')
 
 const ExpressError = require('./utils/ExpressError')
 const catchAsync = require('./utils/catchAsync')
@@ -55,7 +56,21 @@ app.get('/users/new', (req, res) => {
 })
 
 app.post('/users', catchAsync(async (req, res, next) => {
-    if (!req.body) throw new ExpressError('Invalid user data', 400);
+    const userSchema = Joi.object({
+        user: Joi.object({
+            firstName: Joi.string().alphanum().required(),
+            lastName: Joi.string().alphanum().required(),
+            username: Joi.string().required(),
+            image: Joi.string().required(),
+            bio: Joi.string().required()
+        }).required() // ensure user is an object and is required
+    })
+
+    const {error} = userSchema.validate(req.body)
+    if(error) {
+        const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
+        throw new ExpressError(msg, 400)
+    }
 
     const newUser = new User(req.body)
     await newUser.save()
