@@ -29,6 +29,7 @@ app.engine('ejs', ejsMate)
 app.use(express.urlencoded({extended: true})) // ensures urlencoded data can be parsed by express when we call req.body
 //app.use(express.json())
 app.use(methodOverride('_method'))
+
 /* ################################################# */
 
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
