@@ -6,16 +6,26 @@
             <div class="mb-3">
                 <label class="form-label" for="firstName">User's First Name</label>
                 <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First name..." required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
         
             <div class="mb-3">
                 <label class="form-label" for="lastName">User's Last Name</label>
-                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last name..." required>
+                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last
+                name..." required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
         
             <div class="mb-3">
                 <label class="form-label" for="username">User's Username</label>
                 <input class="form-control" type="text" name="username" id="username" placeholder="Username..." required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
 
             <div class="mb-3">
@@ -26,6 +36,9 @@
             <div class="mb-3">
                 <label class="form-label" for="bio">User's</label>
                 <textarea class="form-control" type="text" name="bio" id="bio" placeholder="Bio..." required></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
 
             <div class="mb-3">
@@ -35,25 +48,3 @@
         <a href="/campgrounds">All Users</a>
     </div>
 </div>
-
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (() => {
-            'use strict'
-
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            const forms = document.querySelectorAll('.validated-form')
-
-            // Loop over them and prevent submission
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
-</script>
