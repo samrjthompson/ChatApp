@@ -6,15 +6,19 @@ const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 
+const AppError = require('./AppError')
+
+const dbUrl = 'mongodb+srv://Sam:AleEEEOirAqGGl86@cluster0.ncr0l.mongodb.net/?retryWrites=true&w=majority'
+
 // MODELS
 const User = require('./models/user')
 const MessageBoard = require('./models/messageBoard')
 /* ################################################# */
 
 const port = 3000
-
+//'mongodb://localhost:27017/chat-app'
 // CONNECTION SETUP
-mongoose.connect('mongodb://localhost:27017/chat-app')
+mongoose.connect(dbUrl)
 .then(() => {
     console.log('MONGO CONNECTION OPEN!')
 })
