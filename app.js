@@ -6,7 +6,7 @@ const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 
-const ExpressError = require('./utils/ExpressErorr')
+const ExpressError = require('./utils/ExpressError')
 const catchAsync = require('./utils/catchAsync')
 
 //const remoteUrl = 'mongodb+srv://Sam:AleEEEOirAqGGl86@cluster0.ncr0l.mongodb.net/?retryWrites=true&w=majority'
@@ -54,6 +54,8 @@ app.get('/users/new', (req, res) => {
 })
 
 app.post('/users', catchAsync(async (req, res, next) => {
+    if (!req.body) throw new ExpressError('Invalid user data', 400);
+
     const newUser = new User(req.body)
     await newUser.save()
     res.redirect(`users/${newUser._id}`)
@@ -144,8 +146,14 @@ app.delete('/messageBoards/:id', catchAsync(async (req, res) => {
 
 //////////////////////////////////////////////////////
 
+// if none of the above requests are hit, then this will be hit - * means anything in the url
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page not found!', 404,));
+})
+
 app.use((err, req, res, next) => {
-    res.send('Oh boy, something went wrong!')
+    const {statusCode = 500, message = 'Something went wrong'} = err;
+    res.status(statusCode).send(message);
 })
 
 app.listen(port, () => {
