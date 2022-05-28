@@ -39,7 +39,7 @@ app.use(express.urlencoded({extended: true})) // ensures urlencoded data can be 
 app.use(methodOverride('_method'))
 
 const validateUser = (req, res, next) => {
-    const {error} = userSchema.validate(req.body)
+    const { error } = userSchema.validate(req.body)
     if(error) {
         const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
         throw new ExpressError(msg, 400)
