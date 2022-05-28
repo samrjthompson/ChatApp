@@ -37,6 +37,27 @@ app.use(express.urlencoded({extended: true})) // ensures urlencoded data can be 
 //app.use(express.json())
 app.use(methodOverride('_method'))
 
+const validateUser = (req, res, next) => {
+    const userSchema = Joi.object({
+        user: Joi.object({
+            firstName: Joi.string().alphanum().required(),
+            lastName: Joi.string().alphanum().required(),
+            username: Joi.string().required(),
+            image: Joi.string().required(),
+            bio: Joi.string().required()
+        }).required() // ensure user is an object and is required
+    })
+
+    const {error} = userSchema.validate(req.body)
+    if(error) {
+        const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
+        throw new ExpressError(msg, 400)
+    }
+    else {
+        next();
+    }
+}
+
 /* ################################################# */
 
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
@@ -55,24 +76,8 @@ app.get('/users/new', (req, res) => {
     res.render('users/new')
 })
 
-app.post('/users', catchAsync(async (req, res, next) => {
-    const userSchema = Joi.object({
-        user: Joi.object({
-            firstName: Joi.string().alphanum().required(),
-            lastName: Joi.string().alphanum().required(),
-            username: Joi.string().required(),
-            image: Joi.string().required(),
-            bio: Joi.string().required()
-        }).required() // ensure user is an object and is required
-    })
-
-    const {error} = userSchema.validate(req.body)
-    if(error) {
-        const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
-        throw new ExpressError(msg, 400)
-    }
-
-    const newUser = new User(req.body)
+app.post('/users', validateUser, catchAsync(async (req, res, next) => {
+    const newUser = new User(req.body.user)
     await newUser.save()
     res.redirect(`users/${newUser._id}`)
 }))
@@ -96,7 +101,7 @@ app.get('/users/:id/edit', catchAsync(async (req, res) => {
     res.render('users/edit', { user })
 }))
 
-app.put('/users/:id', catchAsync(async (req, res) => {
+app.put('/users/:id', validateUser, catchAsync(async (req, res) => {
     const {id} = req.params
     const user = await User.findByIdAndUpdate(id, req.body.user)
     res.redirect(`/users/${user._id}`)
