@@ -6,6 +6,7 @@ const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 const Joi = require('joi')
+const { userSchema } = require('./schemas.js')
 
 const ExpressError = require('./utils/ExpressError')
 const catchAsync = require('./utils/catchAsync')
@@ -38,16 +39,6 @@ app.use(express.urlencoded({extended: true})) // ensures urlencoded data can be 
 app.use(methodOverride('_method'))
 
 const validateUser = (req, res, next) => {
-    const userSchema = Joi.object({
-        user: Joi.object({
-            firstName: Joi.string().alphanum().required(),
-            lastName: Joi.string().alphanum().required(),
-            username: Joi.string().required(),
-            image: Joi.string().required(),
-            bio: Joi.string().required()
-        }).required() // ensure user is an object and is required
-    })
-
     const {error} = userSchema.validate(req.body)
     if(error) {
         const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
