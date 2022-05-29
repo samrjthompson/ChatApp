@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
+const session = require('express-session')
+const flash = require('connect-flash')
 
 const ExpressError = require('./utils/ExpressError')
 const catchAsync = require('./utils/catchAsync')
@@ -39,19 +41,36 @@ app.use(express.urlencoded({extended: true})) // ensures urlencoded data can be 
 //app.use(express.json())
 app.use(methodOverride('_method'))
 
+const sessionOptions = {
+    secret: 'thesecret',
+    resave: false,
+    saveUninitialized: false
+}
+app.use(session(sessionOptions))
+app.use(flash())
+
 
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
 // e.g. res.render('campgrounds/show') refers to ~/views/campgrounds/show.ejs
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.get('/', (req, res) => {
-    res.render('home')
-})
+    res.render('home');
+});
 
 app.use('/', userRouter);
 app.use('/', messageBoardRouter);
 
+app.get('/viewcount', (req, res) => {
+    if(req.session.count) {
+        req.session.count += 1
+    }
+    else {
+        req.session.count = 1
+    }
+    res.send(`You have viewed this page ${req.session.count} times`);
+})
 
 //////////////////////////////////////////////////////
 

@@ -41,6 +41,7 @@ router.post('/users', validateUser, catchAsync(async (req, res, next) => {
 // READ
 router.get('/users', async (req, res) => {
     const users = await User.find({})
+    
     res.render('users/index', { users })
 })
 
