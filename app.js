@@ -66,25 +66,6 @@ app.get('/', (req, res) => {
 app.use('/', userRouter);
 app.use('/', messageBoardRouter);
 
-app.get('/fakeuser', async (req, res) => {
-    const user = new UserModel({ email: 'sam@gmail.com', username: 'samrtj' })
-    const newUser = await UserModel.register(user, 'password')
-
-    res.send(newUser)
-})
-
-app.get('/viewcount', (req, res) => {
-    if(req.session.count) {
-        req.session.count += 1
-    }
-    else {
-        req.session.count = 1
-    }
-    res.send(`You have viewed this page ${req.session.count} times`);
-})
-
-//////////////////////////////////////////////////////
-
 // if none of the above requests are hit, then this will be hit - * means anything in the url
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found!', 404,));
