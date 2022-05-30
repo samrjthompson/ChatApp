@@ -26,6 +26,10 @@ const validateUser = (req, res, next) => {
     }
 }
 
+router.get('/register', (req, res) => {
+    res.render('users/register')
+})
+
 // CREATE
 router.get('/users/new', (req, res) => {
     res.render('users/new')

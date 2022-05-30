@@ -3,10 +3,12 @@ const app = express()
 const path = require('path')
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
-const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 const session = require('express-session')
 const flash = require('connect-flash')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+const UserModel = require('./models/user')
 
 const ExpressError = require('./utils/ExpressError')
 const catchAsync = require('./utils/catchAsync')
@@ -16,11 +18,6 @@ const messageBoardRouter = require('./routes/messageBoard')
 
 const remoteUrl = 'mongodb+srv://Sam:AleEEEOirAqGGl86@cluster0.ncr0l.mongodb.net/?retryWrites=true&w=majority'
 const localUrl = 'mongodb://localhost:27017/chat-app'
-
-// MODELS
-const User = require('./models/user')
-const MessageBoard = require('./models/messageBoard')
-/* ################################################# */
 
 const port = 3000
 
@@ -46,8 +43,15 @@ const sessionOptions = {
     resave: false,
     saveUninitialized: false
 }
+
 app.use(session(sessionOptions))
 app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.use(new LocalStrategy (UserModel.authenticate()))
+passport.serializeUser(UserModel.serializeUser())
+passport.deserializeUser(UserModel.deserializeUser())
 
 
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
@@ -61,6 +65,13 @@ app.get('/', (req, res) => {
 
 app.use('/', userRouter);
 app.use('/', messageBoardRouter);
+
+app.get('/fakeuser', async (req, res) => {
+    const user = new UserModel({ email: 'sam@gmail.com', username: 'samrtj' })
+    const newUser = await UserModel.register(user, 'password')
+
+    res.send(newUser)
+})
 
 app.get('/viewcount', (req, res) => {
     if(req.session.count) {
