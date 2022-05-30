@@ -11,7 +11,6 @@ const LocalStrategy = require('passport-local')
 const UserModel = require('./models/user')
 
 const ExpressError = require('./utils/ExpressError')
-const catchAsync = require('./utils/catchAsync')
 
 const userRouter = require('./routes/user')
 const messageBoardRouter = require('./routes/messageBoard')
@@ -37,21 +36,39 @@ app.engine('ejs', ejsMate)
 app.use(express.urlencoded({extended: true})) // ensures urlencoded data can be parsed by express when we call req.body
 //app.use(express.json())
 app.use(methodOverride('_method'))
+app.use(express.static(path.join(__dirname, 'public')))
 
-const sessionOptions = {
+const sessionConfig = {
     secret: 'thesecret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true, // ensures that client cannot expose cookie to third party
+        expires: Date.now() + 1000 * 60 * 30, // cookie expires in 30 mins - 1000ms * 60 (1 min) * 30 (30 mins)
+        maxAge: 1000 * 60 * 30 // maxAge = 30 mins
+    }
 }
 
-app.use(session(sessionOptions))
+app.use(session(sessionConfig))
 app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
 
 passport.use(new LocalStrategy (UserModel.authenticate()))
+
 passport.serializeUser(UserModel.serializeUser())
 passport.deserializeUser(UserModel.deserializeUser())
+
+app.use((req, res, next) => {
+    console.log(req.session)
+    // this adds the key 'success' to res.locals and so can be accessed anywhere by ejs files under the key 'success'
+    // then anything that is assigned to 'success' as a req.flash.. will be added to this
+    // e.g., req.flash('success', 'Well done!') will add the string 'Well done!' to the 'success' variable
+    res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error')
+    res.locals.currentUser = req.user
+    next()
+})
 
 
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
