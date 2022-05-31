@@ -7,6 +7,8 @@ const catchAsync = require('../utils/catchAsync')
 
 // MODELS
 const MessageBoard = require('../models/messageBoard')
+const User = require('../models/user')
+const ExpressError = require('../utils/ExpressError')
 
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
 // e.g. res.render('campgrounds/show') refers to ~/views/campgrounds/show.ejs
@@ -20,15 +22,22 @@ router.get('/messageBoards/new', isLoggedIn, (req, res) => {
 
 router.post('/messageBoards', isLoggedIn, validateMessageBoard, catchAsync(async (req, res, next) => {
     const newMessageBoard = new MessageBoard(req.body.messageBoard)
-    newMessageBoard.authorId = req.user._id; // we can use req.user because of the passport module to get current user
+    const currentUser = req.user
+    
+    newMessageBoard.authorId = currentUser._id;
+    currentUser.messageBoardIds.push(newMessageBoard._id) 
+
+    await User.findByIdAndUpdate(currentUser._id, currentUser) // updates current user on db with new messageBoard id
     await newMessageBoard.save()
     res.redirect(`messageBoards/${newMessageBoard._id}`)
 }))
 
 // READ
 router.get('/messageBoards', isLoggedIn, async (req, res) => {
-    // find all messageBoards with the authorId of the current user
-    const messageBoards = await MessageBoard.find({"authorId": req.user._id})
+    const messageBoardIds = req.user.messageBoardIds
+    // finds all messageBoards with the given id and returns them as an array
+    const messageBoards = await MessageBoard.find({"_id": messageBoardIds})
+
     if(messageBoards.length === 0) {
         req.flash('error', 'You have no message boards! Please create one...')
         return res.redirect('/messageBoards/new')
@@ -38,7 +47,13 @@ router.get('/messageBoards', isLoggedIn, async (req, res) => {
 
 router.get('/messageBoards/:id', isLoggedIn, catchAsync(async (req, res) => {
     // populate finds the object with that id in the db and adds it to the messageBoard object here (not in the db)
-    const messageBoard = await MessageBoard.findById(req.params.id).populate('authorId')
+    const { id } = req.params
+    const messageBoard = await MessageBoard.findById(id).populate({
+        path:'authorId',
+        populate: {
+            path: 'firstName' // this is an example of a nested populate - so we're populating from an object on the author object that has been populated on the messageBoard
+        }
+    })
     console.log(messageBoard)
     res.render('messageBoards/show', { messageBoard })
 }))

@@ -8,6 +8,12 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
+    messageBoardIds: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'MessageBoard'
+        }
+    ],
     firstName: String,
     lastName: String,
     //username: String,

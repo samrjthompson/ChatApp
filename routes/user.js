@@ -92,7 +92,7 @@ router.get('/users/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
 }))
 
 router.put('/users/:id', isLoggedIn, validateUser, catchAsync(async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params
     const user = await User.findByIdAndUpdate(id, req.body.user)
     req.flash('success', 'Successfully updated user!')
     res.redirect(`/users/${user._id}`)
@@ -100,7 +100,7 @@ router.put('/users/:id', isLoggedIn, validateUser, catchAsync(async (req, res) =
 
 // DELETE
 router.delete('/users/:id', catchAsync(async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params
     await User.findByIdAndDelete(id)
     req.flash('success', 'Successfully deleted user')
     res.redirect('/users')

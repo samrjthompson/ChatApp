@@ -8,10 +8,14 @@
                     <%=messageBoard.name%>
                     Created by <%= messageBoard.authorId.username %> 
                 </h5>
+                
+                <% if(currentUser && messageBoard.authorId.equals(currentUser._id)) { %>
                 <a href="/messageBoards/<%=messageBoard._id%>/edit" class="card-link btn btn-info">Edit</a>
+                 
                 <form class="d-inline" action="/messageBoards/<%=messageBoard._id%>?_method=DELETE" method="POST">
                     <button class="btn btn-danger">Delete</button>
                 </form>
+                <% } %> 
             </div>
         </div>
     </div>
