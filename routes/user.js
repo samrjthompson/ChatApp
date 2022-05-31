@@ -4,7 +4,6 @@ const path = require('path')
 const router = express.Router()
 const passport = require('passport')
 const { isLoggedIn, validateUser } = require('../middleware')
-
 const catchAsync = require('../utils/catchAsync')
 
 // MODELS

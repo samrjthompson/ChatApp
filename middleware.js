@@ -6,7 +6,7 @@ like postman
 // MODELS
 const MessageBoard = require('./models/messageBoard')
 const ExpressError = require('./utils/ExpressError')
-const { userSchema } = require('./schemas')
+const { userSchema, messageBoardSchema } = require('./schemas')
 
 // checks to see if user is logged in
 module.exports.isLoggedIn = (req, res, next) => {
@@ -19,11 +19,30 @@ module.exports.isLoggedIn = (req, res, next) => {
     next()
 }
 
+// validates that the required information is present in the form
 module.exports.validateUser = (req, res, next) => {
     const { error } = userSchema.validate(req.body)
     if(error) {
         const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
         throw new ExpressError(msg, 400)
+    }
+    else {
+        next();
+    }
+}
+
+// validates that the required information is present in the form
+module.exports.validateMessageBoard = (req, res, next) => {
+    const { error } = messageBoardSchema.validate(req.body)
+    if(error) {
+        const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
+        //throw new ExpressError(msg, 400)
+        const newMsg = error.message
+        const splitMsg = newMsg.split('"').pop()
+
+        // TODO - fix hardcoding here
+        req.flash('error', `"Name of Group Chat"${splitMsg}`)
+        return res.redirect('/messageBoards/new')
     }
     else {
         next();

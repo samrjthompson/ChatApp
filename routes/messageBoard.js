@@ -2,8 +2,7 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const router = express.Router()
-const { isLoggedIn, isAuthor } = require('../middleware')
-
+const { isLoggedIn, isAuthor, validateMessageBoard } = require('../middleware')
 const catchAsync = require('../utils/catchAsync')
 
 // MODELS
@@ -19,8 +18,8 @@ router.get('/messageBoards/new', isLoggedIn, (req, res) => {
     res.render('messageBoards/new')
 })
 
-router.post('/messageBoards', isLoggedIn, catchAsync(async (req, res, next) => {
-    const newMessageBoard = new MessageBoard(req.body)
+router.post('/messageBoards', isLoggedIn, validateMessageBoard, catchAsync(async (req, res, next) => {
+    const newMessageBoard = new MessageBoard(req.body.messageBoard)
     newMessageBoard.authorId = req.user._id; // we can use req.user because of the passport module to get current user
     await newMessageBoard.save()
     res.redirect(`messageBoards/${newMessageBoard._id}`)

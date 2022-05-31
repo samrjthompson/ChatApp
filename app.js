@@ -9,15 +9,11 @@ const flash = require('connect-flash')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const UserModel = require('./models/user')
-
 const ExpressError = require('./utils/ExpressError')
-
 const userRouter = require('./routes/user')
 const messageBoardRouter = require('./routes/messageBoard')
-
 const remoteUrl = 'mongodb+srv://Sam:AleEEEOirAqGGl86@cluster0.ncr0l.mongodb.net/?retryWrites=true&w=majority'
 const localUrl = 'mongodb://localhost:27017/chat-app'
-
 const port = 3000
 
 // CONNECTION SETUP

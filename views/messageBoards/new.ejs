@@ -2,13 +2,17 @@
 <div class="row">
     <h1 class="text-center">Create New Message Board</h1>
     <div class="col-6 offset-3">
-        <form class="mb-3" action="/messageBoards" method="POST">
+        <form class="mb-3" action="/messageBoards" method="POST" novalidate class="validated-form">
             <div class="mb-3">
-                <label class="form-label" for="name">Name of Group Chat</label>
-                <input class="form-control" type="text" name="name" id="name" placeholder="Name...">
+                <label class="form-label" for="name" name="name">Name of Group Chat</label>
+                <input class="form-control" type="text" name="messageBoard[name]" id="name" placeholder="Name..." required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
-        
-            <button class="btn btn-success">Submit</button>
+            <div>
+                <button class="btn btn-success">Submit</button>                
+            </div>
         </form>
         <a href="/messageBoards">All Message Boards</a>
     </div>

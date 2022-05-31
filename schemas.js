@@ -9,3 +9,9 @@ module.exports.userSchema = Joi.object({
         bio: Joi.string().required()
     }).required() // ensure user is an object and is required
 })
+
+module.exports.messageBoardSchema = Joi.object({
+    messageBoard: Joi.object({
+        name: Joi.string().alphanum().required()
+    }).required()
+})
