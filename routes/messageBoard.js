@@ -23,11 +23,10 @@ router.get('/messageBoards/new', isLoggedIn, (req, res) => {
 router.post('/messageBoards', isLoggedIn, validateMessageBoard, catchAsync(async (req, res, next) => {
     const newMessageBoard = new MessageBoard(req.body.messageBoard)
     const currentUser = req.user
-    
+
     newMessageBoard.authorId = currentUser._id;
     currentUser.messageBoardIds.push(newMessageBoard._id) 
 
-    await User.findByIdAndUpdate(currentUser._id, currentUser) // updates current user on db with new messageBoard id
     await newMessageBoard.save()
     res.redirect(`messageBoards/${newMessageBoard._id}`)
 }))
@@ -54,7 +53,6 @@ router.get('/messageBoards/:id', isLoggedIn, catchAsync(async (req, res) => {
             path: 'firstName' // this is an example of a nested populate - so we're populating from an object on the author object that has been populated on the messageBoard
         }
     })
-    console.log(messageBoard)
     res.render('messageBoards/show', { messageBoard })
 }))
 
@@ -70,10 +68,50 @@ router.put('/messageBoards/:id', isLoggedIn, isAuthor, catchAsync(async (req, re
     res.redirect(`/messageBoards/${mb._id}`)
 }))
 
+// Leave group chat
+router.post('/messageBoards/:id/leave', isLoggedIn, catchAsync(async (req, res) => {
+    const { id } = req.params
+    const currentUser = req.user
+    const userId = currentUser._id
+    const messageBoardIds = currentUser.messageBoardIds
+
+    for(i = 0; i < messageBoardIds.length; i++) {
+        if(messageBoardIds[i] == id) {
+            messageBoardIds.splice(i, 1)
+            break
+        }
+    }
+    await User.findByIdAndUpdate(userId, currentUser)
+    res.redirect('/messageBoards')
+}))
+
+router.get('/messageBoards/:id/addUserToGroup', catchAsync(async(req, res) => {
+    const { id } = req.params
+    res.render('messageBoards/addUser', { id })
+}))
+
+router.post('/messageBoards/:id/addUserToGroup', catchAsync(async(req, res) => {
+    const { id } = req.params
+    const { username } = req.body      
+    const userToAdd = await User.findOne({"username": username}) // findOne returns an actual object rather than just a document
+    const { messageBoardIds } = userToAdd
+
+    if(!userToAdd) {
+        req.flash('error', 'Could not find that user, please try again')
+        return res.redirect(`/messageBoards/${id}/addUserToGroup`)
+    }
+
+    messageBoardIds.push(id)
+    await User.findByIdAndUpdate(userToAdd._id, userToAdd)
+
+    res.redirect(`/messageBoards/${id}`)
+}))
+
 // DELETE
 router.delete('/messageBoards/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     await MessageBoard.findByIdAndDelete(req.params.id)
     res.redirect('/messageBoards')
 }))
+
 
 module.exports = router;

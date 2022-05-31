@@ -8,13 +8,18 @@
                     <%=messageBoard.name%>
                     Created by <%= messageBoard.authorId.username %> 
                 </h5>
-                
+
                 <% if(currentUser && messageBoard.authorId.equals(currentUser._id)) { %>
                 <a href="/messageBoards/<%=messageBoard._id%>/edit" class="card-link btn btn-info">Edit</a>
                  
                 <form class="d-inline" action="/messageBoards/<%=messageBoard._id%>?_method=DELETE" method="POST">
                     <button class="btn btn-danger">Delete</button>
                 </form>
+                <form class="d-inline" action="/messageBoards/<%=messageBoard._id%>/leave" method="POST">
+                    <button class="btn btn-warning">Leave Group Chat</button>
+                </form>
+
+                <a href="/messageBoards/<%=messageBoard._id%>/addUserToGroup" class="card-link btn btn-info">Add User to Group</a>
                 <% } %> 
             </div>
         </div>
