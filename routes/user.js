@@ -3,11 +3,9 @@ const app = express()
 const path = require('path')
 const router = express.Router()
 const passport = require('passport')
-const { isLoggedIn } = require('../middleware')
+const { isLoggedIn, validateUser } = require('../middleware')
 
-const ExpressError = require('../utils/ExpressError')
 const catchAsync = require('../utils/catchAsync')
-const { userSchema } = require('../schemas')
 
 // MODELS
 const User = require('../models/user')
@@ -17,17 +15,6 @@ const messageBoard = require('../models/messageBoard')
 // e.g. res.render('campgrounds/show') refers to ~/views/campgrounds/show.ejs
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
-
-const validateUser = (req, res, next) => {
-    const { error } = userSchema.validate(req.body)
-    if(error) {
-        const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
-        throw new ExpressError(msg, 400)
-    }
-    else {
-        next();
-    }
-}
 
 router.get('/register', (req, res) => {
     // if user is already logged in...
@@ -63,12 +50,9 @@ router.get('/login', (req, res) => {
 
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
     // all the logic for contacting the db and authenticating is done by 'passport' automatically
-    console.log(`req.session.returnTo = ${req.session.returnTo}`)
-    console.log(`req.originalUrl = ${req.originalUrl}`)
     req.flash('success', 'Welcome back!')
-    const redirectUrl = req.session.returnTo || '/users'
-    console.log(`redirectUrl = ${redirectUrl}`)
-    delete req.session.returnTo
+    const redirectUrl = req.session.returnTo || '/users' // if returnTo is defined, then go there. If not, then go to /users
+    delete req.session.returnTo // set returnTo to undefined
     res.redirect(redirectUrl)
 })
 
@@ -82,7 +66,6 @@ router.post('/users', validateUser, catchAsync(async (req, res, next) => {
     await newUser.save()
     res.redirect(`users/${newUser._id}`)
 }))
-/* ################################################# */
 
 // READ
 router.get('/users', async (req, res) => {
@@ -98,7 +81,6 @@ router.get('/users/:id', catchAsync(async (req, res) => {
     }
     res.render('users/show', { user })
 }))
-/* ################################################# */
 
 // UPDATE
 router.get('/users/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
@@ -110,13 +92,12 @@ router.get('/users/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     res.render('users/edit', { user })
 }))
 
-router.put('/users/:id', validateUser, catchAsync(async (req, res) => {
+router.put('/users/:id', isLoggedIn, validateUser, catchAsync(async (req, res) => {
     const {id} = req.params
     const user = await User.findByIdAndUpdate(id, req.body.user)
     req.flash('success', 'Successfully updated user!')
     res.redirect(`/users/${user._id}`)
 }))
-/* ################################################# */
 
 // DELETE
 router.delete('/users/:id', catchAsync(async (req, res) => {

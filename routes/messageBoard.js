@@ -2,13 +2,9 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const router = express.Router()
-const passport = require('passport')
-const { isLoggedIn } = require('../middleware')
-const { isAuthor } = require('../middleware')
+const { isLoggedIn, isAuthor } = require('../middleware')
 
-const ExpressError = require('../utils/ExpressError')
 const catchAsync = require('../utils/catchAsync')
-const { messageBoardSchema } = require('../schemas')
 
 // MODELS
 const MessageBoard = require('../models/messageBoard')
@@ -17,17 +13,6 @@ const MessageBoard = require('../models/messageBoard')
 // e.g. res.render('campgrounds/show') refers to ~/views/campgrounds/show.ejs
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
-
-const validateUser = (req, res, next) => {
-    const { error } = userSchema.validate(req.body)
-    if(error) {
-        const msg = error.details.map(element => element.message).join(',') // for each element return element.message and join on a comma if more than one message
-        throw new ExpressError(msg, 400)
-    }
-    else {
-        next();
-    }
-}
 
 // CREATE
 router.get('/messageBoards/new', isLoggedIn, (req, res) => {
@@ -40,7 +25,6 @@ router.post('/messageBoards', isLoggedIn, catchAsync(async (req, res, next) => {
     await newMessageBoard.save()
     res.redirect(`messageBoards/${newMessageBoard._id}`)
 }))
-/* ################################################# */
 
 // READ
 router.get('/messageBoards', isLoggedIn, async (req, res) => {
@@ -59,7 +43,6 @@ router.get('/messageBoards/:id', isLoggedIn, catchAsync(async (req, res) => {
     console.log(messageBoard)
     res.render('messageBoards/show', { messageBoard })
 }))
-/* ################################################# */
 
 // UPDATE
 router.get('/messageBoards/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
@@ -67,12 +50,11 @@ router.get('/messageBoards/:id/edit', isLoggedIn, isAuthor, catchAsync(async (re
     res.render('messageBoards/edit', { messageBoard })
 }))
 
-router.put('/messageBoards/:id', catchAsync(async (req, res) => {
+router.put('/messageBoards/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id } = req.params;
     const mb = await MessageBoard.findByIdAndUpdate(id, req.body.messageBoard)
     res.redirect(`/messageBoards/${mb._id}`)
 }))
-/* ################################################# */
 
 // DELETE
 router.delete('/messageBoards/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {

@@ -29,7 +29,6 @@ mongoose.connect(remoteUrl)
     console.log('ERROR: MONGO Connection Failed!')
     console.log(err)
 })
-/* ################################################# */
 
 // MIDDLEWARE
 app.engine('ejs', ejsMate)
@@ -69,7 +68,6 @@ app.use((req, res, next) => {
     next()
 })
 
-
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
 // e.g. res.render('campgrounds/show') refers to ~/views/campgrounds/show.ejs
 app.set('view engine', 'ejs');
@@ -93,6 +91,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err })
 })
 
+// LISTEN
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`)
 })
