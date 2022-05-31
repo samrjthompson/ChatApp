@@ -60,7 +60,6 @@ passport.serializeUser(UserModel.serializeUser())
 passport.deserializeUser(UserModel.deserializeUser())
 
 app.use((req, res, next) => {
-    console.log(req.session)
     // this adds the key 'success' to res.locals and so can be accessed anywhere by ejs files under the key 'success'
     // then anything that is assigned to 'success' as a req.flash.. will be added to this
     // e.g., req.flash('success', 'Well done!') will add the string 'Well done!' to the 'success' variable

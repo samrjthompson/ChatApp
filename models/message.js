@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 const user = require('./user');
 const messageBoard = require('./messageBoard')
 const Schema = mongoose.Schema
+const passportLocalMongoose = require('passport-local-mongoose')
 
 const MessageSchema = new Schema({
     text: String,
-    senderId: String,
+    userId: String,
     messageBoardId: String
 })
 

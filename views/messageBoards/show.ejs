@@ -6,6 +6,7 @@
             <div class="card-body">
                 <h5 class="card-title">
                     <%=messageBoard.name%>
+                    Created by <%= messageBoard.authorId.username %> 
                 </h5>
                 <a href="/messageBoards/<%=messageBoard._id%>/edit" class="card-link btn btn-info">Edit</a>
                 <form class="d-inline" action="/messageBoards/<%=messageBoard._id%>?_method=DELETE" method="POST">

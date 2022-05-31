@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const User = require('../models/user')
 const people = require('./people')
+const MessageBoard = require('../models/messageBoard')
+const messageBoards = require('./messageBoards')
 
 const remoteUrl = 'mongodb+srv://Sam:AleEEEOirAqGGl86@cluster0.ncr0l.mongodb.net/?retryWrites=true&w=majority'
 const localUrl = 'mongodb://localhost:27017/chat-app'
@@ -28,6 +30,13 @@ const seedDB = async () => {
             bio: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit quidem, dolorum consequatur doloribus omnis iure reiciendis, accusantium mollitia eaque earum dignissimos error libero unde autem nostrum magni beatae illum aperiam?'
         })
         await newUser.save()
+    }
+    for(let i = 0; i < 3; i++) {
+        const newMessageBoard = new MessageBoard({
+            authorId: `${messageBoards[i].authorId}`,
+            name: `${messageBoards[i].name}`
+        })
+        await newMessageBoard.save()
     }
 }
 

@@ -11,6 +11,7 @@ const { userSchema } = require('../schemas')
 
 // MODELS
 const User = require('../models/user')
+const messageBoard = require('../models/messageBoard')
 
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
 // e.g. res.render('campgrounds/show') refers to ~/views/campgrounds/show.ejs
