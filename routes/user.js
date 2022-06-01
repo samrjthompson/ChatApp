@@ -12,6 +12,9 @@ const users = require('../controllers/user')
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
+router.route('/')
+    .get(isLoggedIn, catchAsync(users.renderFriendsList))
+
 router.route('/register')
     .get(catchAsync(users.renderRegister))
     .post(isLoggedIn, catchAsync(users.register))

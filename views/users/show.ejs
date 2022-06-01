@@ -1,17 +1,9 @@
 <%layout('layouts/boilerplate')%> 
 
 <div class="row mb-3">
-    <div class="col-6 offset-3">
-        <div class="card">
-            <img src="<%=user.image%>" class="card-img-top">
-            <div class="card-body">
-                <h5 class="card-title"><%=user.username%></h5>
-                <p class="card-text"><%=user.bio%></p>
-                <a href="/users/<%=user._id%>/edit" class="card-link btn btn-info">Edit</a>
-                <form class="d-inline" action="/users/<%=user._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger">Delete</button>
-                </form>
-            </div>
-        </div>
-    </div>
+    <ol>
+        <% for(let f of friendList) { %> 
+        <li><%= f.username %></li>
+        <% } %> 
+    </ol>
 </div>

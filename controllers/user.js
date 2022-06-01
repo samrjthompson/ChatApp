@@ -1,5 +1,12 @@
 const User = require('../models/user')
 
+module.exports.renderFriendsList = async (req, res) => {
+    const currentUser = req.user
+    const friendIdList = currentUser.friendIds
+    const friendList = await User.find({"_id": friendIdList})
+    res.render('users/show', { friendList })
+}
+
 module.exports.renderRegister = (req, res) => {
     res.render('users/register');
 }
