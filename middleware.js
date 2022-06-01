@@ -49,7 +49,7 @@ module.exports.validateMessageBoard = (req, res, next) => {
     }
 }
 
-// checks to see if user is the authro (i.e., primary admin)
+// checks to see if user is the author (i.e., primary admin)
 module.exports.isAuthor = async (req, res, next) => {
     const { id } = req.params;
     const messageBoard = await MessageBoard.findById(id);

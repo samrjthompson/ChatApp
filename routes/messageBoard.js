@@ -9,6 +9,7 @@ const catchAsync = require('../utils/catchAsync')
 const MessageBoard = require('../models/messageBoard')
 const User = require('../models/user')
 const ExpressError = require('../utils/ExpressError')
+const { findByIdAndDelete } = require('../models/user')
 
 // these two ensure the app.get or app.post code refers to rootdirectory/views folder
 // e.g. res.render('campgrounds/show') refers to ~/views/campgrounds/show.ejs
@@ -87,7 +88,11 @@ router.post('/messageBoards/:id/leave', isLoggedIn, catchAsync(async (req, res) 
 
 router.get('/messageBoards/:id/addUserToGroup', catchAsync(async(req, res) => {
     const { id } = req.params
-    res.render('messageBoards/addUser', { id })
+    const user = req.user
+    const friendIdList = user.friendIds
+    const friendList = await User.find({"_id": friendIdList})
+    
+    res.render('messageBoards/addUser', { id, user, friendList })
 }))
 
 router.post('/messageBoards/:id/addUserToGroup', catchAsync(async(req, res) => {

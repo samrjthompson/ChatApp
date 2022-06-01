@@ -17,3 +17,19 @@
         <a href="/messageBoards/">All Message Boards</a>
     </div>
 </div>
+
+<h2>Friend List</h2>
+<ul>
+    <% for(let u of friendList) { %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= u.username %></h5>
+                        <a href="/users/<%= u._id %>" class="btn btn-primary">View profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>         
+</ul>

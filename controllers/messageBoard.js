@@ -1,0 +1,1 @@
+const messageBoard = require('../models/messageBoard')

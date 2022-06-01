@@ -14,6 +14,12 @@ const UserSchema = new Schema({
             ref: 'MessageBoard'
         }
     ],
+    friendIds: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Friends'
+        }
+    ],
     firstName: String,
     lastName: String,
     //username: String,

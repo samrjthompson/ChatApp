@@ -73,8 +73,8 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.use('/', userRouter);
-app.use('/', messageBoardRouter);
+app.use('/users', userRouter);
+app.use('/messageBoards', messageBoardRouter);
 
 // if none of the above requests are hit, then this will be hit - * means anything in the url
 app.all('*', (req, res, next) => {

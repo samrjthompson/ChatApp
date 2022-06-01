@@ -1,0 +1,12 @@
+<%layout('layouts/boilerplate')%>
+
+<section>
+    <div>
+        <%for(let friend of users) { %> 
+        <form action="/users/<%=friend._id%>/addFriend?_method=PUT" method="POST">
+            <li><%=friend.username%></li>
+            <button>Add</button>
+        </form>
+        <% } %>             
+    </div>
+</section>
